@@ -1,6 +1,7 @@
 import { useMemo, useState, useEffect, useCallback } from 'react';
-import { createProject, fetchProjects } from './utils/api';
+import { createProject, fetchProjects, fetchProject } from './utils/api';
 import LocationPicker from './components/LocationPicker';
+import ProjectMapView from './components/ProjectMapView';
 import ProjectDetailsForm from './components/ProjectDetailsForm';
 import ProjectList from './components/ProjectList';
 import './App.css';
@@ -22,6 +23,9 @@ export default function ProjectCMS() {
   const [listError, setListError] = useState(null);
   const [message, setMessage] = useState(null);
   const [error, setError] = useState(null);
+  const [viewing, setViewing] = useState(false);
+  const [viewError, setViewError] = useState(null);
+  const [selectedProject, setSelectedProject] = useState(null);
 
   const errors = useMemo(() => {
     const errs = {};
@@ -50,6 +54,20 @@ export default function ProjectCMS() {
   useEffect(() => {
     loadProjects();
   }, [loadProjects]);
+
+  const handleViewProject = async (id) => {
+    setViewing(true);
+    setViewError(null);
+    setSelectedProject(null);
+    try {
+      const result = await fetchProject(id);
+      setSelectedProject(result.project || null);
+    } catch (err) {
+      setViewError(err.message || 'Failed to load project');
+    } finally {
+      setViewing(false);
+    }
+  };
 
   const submitProject = async () => {
     setSaving(true);
@@ -95,6 +113,7 @@ export default function ProjectCMS() {
           loading={loadingProjects}
           error={listError}
           onRefresh={loadProjects}
+          onView={handleViewProject}
         />
 
         {showCreate && (
@@ -181,6 +200,69 @@ export default function ProjectCMS() {
                     onClick={submitProject}
                   >
                     {saving ? 'Saving…' : 'Create project'}
+                  </button>
+                </div>
+              </footer>
+            </div>
+          </div>
+        )}
+
+        {selectedProject && (
+          <div className="form-overlay">
+            <div className="form-panel card">
+              <div className="form-panel-header">
+                <div>
+                  <p className="eyebrow">Project</p>
+                  <h2>{selectedProject.name}</h2>
+                  <p className="lede">ID: {selectedProject.id}</p>
+                </div>
+                <button
+                  className="btn ghost small"
+                  onClick={() => setSelectedProject(null)}
+                >
+                  Close
+                </button>
+              </div>
+              <div className="project-details">
+                <div>
+                  <p className="eyebrow">Description</p>
+                  <p>{selectedProject.description || '—'}</p>
+                </div>
+                <div className="detail-grid">
+                  <div>
+                    <p className="eyebrow">Category</p>
+                    <p>{selectedProject.category || '—'}</p>
+                  </div>
+                  <div>
+                    <p className="eyebrow">Reference ID</p>
+                    <p>{selectedProject.referenceId || '—'}</p>
+                  </div>
+                  <div>
+                    <p className="eyebrow">Start date</p>
+                    <p>{selectedProject.startDate || '—'}</p>
+                  </div>
+                </div>
+                <div className="view-map-shell">
+                  <p className="eyebrow">Location</p>
+                  <ProjectMapView
+                    geometry={selectedProject.locationRaw}
+                    geojson={selectedProject.geom}
+                  />
+                </div>
+              </div>
+              <footer className="page-footer">
+                <div className="footer-messages">
+                  {viewError && <span className="error">{viewError}</span>}
+                </div>
+                <div className="actions">
+                  <button
+                    className="btn ghost"
+                    onClick={() => setSelectedProject(null)}
+                  >
+                    Close
+                  </button>
+                  <button className="btn primary" disabled>
+                    {viewing ? 'Loading…' : 'Edit (coming soon)'}
                   </button>
                 </div>
               </footer>

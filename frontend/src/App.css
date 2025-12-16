@@ -327,6 +327,30 @@ h3 {
   border-top: 1px solid #e5e7eb;
 }
 
+.project-details {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.view-map-shell {
+  margin-top: 12px;
+}
+
+.view-map {
+  height: 320px;
+  margin-top: 8px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+}
+
 .form-overlay {
   position: fixed;
   inset: 0;

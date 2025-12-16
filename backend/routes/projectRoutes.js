@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post('/create', createProject);
 router.get('/list', listProjects);
-router.get('/list:id', viewProject);
+router.get('/list/:id', viewProject);
 
 module.exports = router;
 
