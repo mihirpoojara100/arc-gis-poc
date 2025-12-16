@@ -2,7 +2,13 @@ import React from 'react';
 import { ReactComponent as EyeIcon } from '../icons/eye.svg';
 import { ReactComponent as EditIcon } from '../icons/edit.svg';
 
-export default function ProjectList({ projects, loading, error, onRefresh }) {
+export default function ProjectList({
+  projects,
+  loading,
+  error,
+  onRefresh,
+  onView
+}) {
   return (
     <section className="card">
       <div className="section-header">
@@ -75,7 +81,11 @@ export default function ProjectList({ projects, loading, error, onRefresh }) {
                   </td>
                   <td>
                     <div className="actions-inline">
-                      <button className="icon-button" title="View">
+                      <button
+                        className="icon-button"
+                        title="View"
+                        onClick={() => onView && onView(project.id)}
+                      >
                         <EyeIcon />
                       </button>
                       <button className="icon-button" title="Edit">

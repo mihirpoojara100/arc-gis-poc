@@ -28,5 +28,18 @@ export async function fetchProjects() {
   return res.json();
 }
 
+export async function fetchProject(id) {
+  const res = await fetch(`${API_URL}/projects/list/${id}`, {
+    method: 'GET'
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(text || 'Failed to load project');
+  }
+
+  return res.json();
+}
+
 export { API_URL };
 
