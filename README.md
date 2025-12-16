@@ -26,9 +26,9 @@ Before getting started, ensure that you have the following installed on your loc
 ## Project Structure
 ```bash
 backend
-├── config # Configuration settings
+├── config
 ├── controllers
-├── migration # Services to interact with ArcGIS Enterprise
+├── migration
 ├── models
 ├── migrations
 ├── routes
@@ -39,13 +39,13 @@ backend
 
 frontend
 ├── public
-│ ├── index.html # HTML template
+│ ├── index.html
 └── src
-├── App.js # Main React component
-├── App.css # CSS file
-├── components # UI components (e.g., buttons, forms)
+├── App.js 
+├── App.css
+├── components 
 ├── icons
-└── utils # API services to interact with the backend
+└── utils
 ```
 ## Setup and Installation
 ### 1. Clone the repository
